@@ -5,9 +5,9 @@ print("Hello, World!")
 #Задание_1
 import pandas as pd
 
-contacts = pd.read_csv('contacts.csv', sep=',', encoding='utf-8')
-customers = pd.read_csv('customers.csv', sep=',', encoding='utf-8')
-orders = pd.read_csv('orders.csv', sep=',', encoding='utf-8')
+contacts = pd.read_csv('data/contacts.csv', sep=',', encoding='utf-8')
+customers = pd.read_csv('data/customers.csv', sep=',', encoding='utf-8')
+orders = pd.read_csv('data/orders.csv', sep=',', encoding='utf-8')
 
 customers_info = customers.merge(contacts, on='customer_id', how='left')
 df = customers_info.merge(orders, on='customer_id', how='inner')
