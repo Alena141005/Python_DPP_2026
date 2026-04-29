@@ -9,6 +9,10 @@ contacts = pd.read_csv('data/contacts.csv', sep=',', encoding='utf-8')
 customers = pd.read_csv('data/customers.csv', sep=',', encoding='utf-8')
 orders = pd.read_csv('data/orders.csv', sep=',', encoding='utf-8')
 
+contacts['customer_id'] = contacts['customer_id'].astype(str)
+customers['customer_id'] = customers['customer_id'].astype(str)
+orders['customer_id'] = orders['customer_id'].astype(str)
+
 customers_info = customers.merge(contacts, on='customer_id', how='left')
 df = customers_info.merge(orders, on='customer_id', how='inner')
 
