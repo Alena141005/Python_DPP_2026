@@ -15,22 +15,38 @@ orders = pd.read_csv('data/orders.csv', delimiter=',')
 
 contacts['customer_id'] = pd.to_numeric(contacts['customer_id'], errors='coerce')
 
-
-countries_to_filter = ['Italy', 'Spain', 'UK', 'France', 'Germany', 'Russia']
-
 # print(contacts.info())
 # print(customers.info())
 # print(orders.info())
 
 merged = customers.merge(contacts, on='customer_id', how='inner')
 df = merged.merge(orders, on='customer_id', how='left')
+
+europ = ['Italy', 'Spain', 'UK', 'France', 'Germany', 'Russia']
+
 df['order_date'] = pd.to_datetime(df['order_date'], format='%Y-%m-%d %H:%M:%S', errors='coerce')
 
-filter_1 = df[(df['country'].isin(countries_to_filter)) & (df['order_date']>= '2023-01-01') & (df['order_date'] <= '2023-06-30')]
-filter_2 = df.loc[(df['country'].isin(countries_to_filter)) &  (df['order_date']>= '2023-01-01') & (df['order_date'] <= '2023-06-30')]
-filter_3 = df.query("(country in @countries_to_filter) and (order_date >= '2023-01-01') and (order_date <= '2023-06-30')")
 
-print(sum(filter_1['total']))
-print(sum(filter_2['total']))
-print(sum(filter_3['total']))
+# With []
+task_2 = df[
+         ((df['order_date'].dt.year == 2023) & (df['order_date'].dt.month <= 6))
+         & ((df['country'].isin(europ)) | (df['country'] == 'Russia'))
+         ] [['order_id', 'total']]
 
+# With .loc()
+task_1 = df.loc[
+        ((df['order_date'].dt.year == 2023) & (df['order_date'].dt.month <= 6)) 
+        & ((df['country'].isin(europ)) | (df['country'] == 'Russia')), 
+        ['order_id', 'total']
+        ]
+
+# With .query()
+df['year'] = df['order_date'].dt.year
+df['month'] = df['order_date'].dt.month
+
+task_3 = df.query('year == 2023 and month <= 6 and country.isin(@europ)')[['order_id', 'total']]
+
+
+print(sum(task_1['total']))
+print(sum(task_2['total']))
+print(sum(task_3['total']))
