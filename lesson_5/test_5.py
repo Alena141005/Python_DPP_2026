@@ -9,5 +9,3 @@ df = users.merge(orders, on='user_id', how='left')
 
 counts = df['name'].value_counts()
 print(counts[counts>1].reset_index(name='order_count'))
-
-
